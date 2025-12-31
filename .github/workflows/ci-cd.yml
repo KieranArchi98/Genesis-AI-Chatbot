@@ -4,7 +4,6 @@ permissions:
   contents: read
   packages: write
 
-
 on:
   push:
     branches:
@@ -13,9 +12,59 @@ on:
   pull_request:
 
 jobs:
-  build:
+  lint-backend:
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Linting Tools
+        run: pip install flake8 black
+
+      - name: Run flake8
+        run: |
+          cd backend
+          flake8 .
+
+      - name: Run black check
+        run: |
+          cd backend
+          black --check .
+
+  lint-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Run ESLint
+        run: |
+          cd frontend
+          npm run lint
+
+      - name: Run Prettier check
+        run: |
+          cd frontend
+          npm run format:check
+
+  build:
+    needs: [lint-backend, lint-frontend]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -40,6 +89,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Backend Tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}/backend
         run: |
           cd backend
           pytest --cov=app tests/
@@ -57,12 +108,11 @@ jobs:
 
       # Backend build test
       - name: Build Backend Image (Test)
-        run: docker build -t llm-chatbot-backend:ci ./backend
+        run: docker build -t genesis-backend:ci ./backend
 
       # Frontend build test
       - name: Build Frontend Image (Test)
-        run: docker build -t llm-chatbot-frontend:ci ./frontend
-
+        run: docker build -t genesis-frontend:ci ./frontend
 
   build-and-push:
     needs: build
@@ -99,6 +149,3 @@ jobs:
           tags: |
             ghcr.io/kieranarchi98/genesis-ai-chatbot-frontend:latest
             ghcr.io/kieranarchi98/genesis-ai-chatbot-frontend:${{ github.sha }}
-
-
-
