@@ -33,6 +33,28 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      # Backend Tests
+      - name: Install Backend Dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+
+      - name: Run Backend Tests
+        run: |
+          cd backend
+          pytest --cov=app tests/
+
+      # Frontend Tests
+      - name: Install Frontend Dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Run Frontend Tests
+        run: |
+          cd frontend
+          npm test -- --coverage --watchAll=false
+
       # Backend build test
       - name: Build Backend Image (Test)
         run: docker build -t llm-chatbot-backend:ci ./backend
@@ -40,6 +62,7 @@ jobs:
       # Frontend build test
       - name: Build Frontend Image (Test)
         run: docker build -t llm-chatbot-frontend:ci ./frontend
+
 
   build-and-push:
     needs: build
