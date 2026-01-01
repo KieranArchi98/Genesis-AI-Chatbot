@@ -13,9 +13,11 @@ interface InitialViewProps {
   >; // omit potentially conflicting props
 }
 
-
-
-export default function InitialView({ onSendMessage, onToggleSidebar, searchInputProps }: InitialViewProps) {
+export default function InitialView({
+  onSendMessage,
+  onToggleSidebar,
+  searchInputProps,
+}: InitialViewProps) {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -73,7 +75,10 @@ export default function InitialView({ onSendMessage, onToggleSidebar, searchInpu
   return (
     <div className="flex-1 flex flex-col relative">
       <div className="flex items-center justify-between p-4 border-b border-mist lg:hidden">
-        <button onClick={onToggleSidebar} className="p-2 hover:bg-mist-medium/30 rounded-lg transition-colors">
+        <button
+          onClick={onToggleSidebar}
+          className="p-2 hover:bg-mist-medium/30 rounded-lg transition-colors"
+        >
           <Menu className="w-5 h-5 text-fog" />
         </button>
         <div className="w-8 h-8 bg-gradient-to-br from-pale-cyan/20 to-vapor-blue/20 rounded-lg flex items-center justify-center border border-pale-cyan/20">
@@ -147,9 +152,6 @@ export default function InitialView({ onSendMessage, onToggleSidebar, searchInpu
               }}
               {...searchInputProps} // will never include onChange/value
             />
-
-
-
 
             <button className="p-3 text-fog hover:text-cyan transition-colors">
               <Mic className="w-5 h-5" />
