@@ -33,7 +33,6 @@ function ChatArea({
   loading,
   messageBoxProps, // <--- add this
 }: ChatAreaProps) {
-
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [message, setMessage] = React.useState('');
 

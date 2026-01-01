@@ -84,5 +84,12 @@
     "prettier": "^3.7.4",
     "ts-jest": "^29.1.1",
     "whatwg-fetch": "^3.6.20"
+  },
+  "eslintConfig": {
+    "extends": [
+      "next",
+      "next/core-web-vitals",
+      "prettier"
+    ]
   }
 }
