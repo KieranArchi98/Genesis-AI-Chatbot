@@ -26,7 +26,14 @@ interface ChatAreaProps {
   messageBoxProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 }
 
-export default function ChatArea({ chat, onSendMessage, onToggleSidebar, loading, messageBoxProps }: ChatAreaProps) {
+function ChatArea({
+  chat,
+  onSendMessage,
+  onToggleSidebar,
+  loading,
+  messageBoxProps, // <--- add this
+}: ChatAreaProps) {
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [message, setMessage] = React.useState('');
 
